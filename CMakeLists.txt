@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.2)
 project("boiler")
 
-add_executable(boiler-logger boiler-logger.cpp)
+add_executable(boiler-logger Serial.cpp boiler-logger.cpp)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD 11)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD_REQUIRED ON)
 
