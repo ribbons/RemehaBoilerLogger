@@ -19,6 +19,7 @@ struct Header
 
 struct Trailer
 {
+    uint8_t csum : 8;
     uint8_t end : 8;
 } __attribute__((__packed__));
 
@@ -44,6 +45,18 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     struct Trailer trailer;
     memcpy(&trailer, &raw[raw.size() - sizeof(trailer)], sizeof(trailer));
+
+    uint8_t csum = 0;
+
+    for(int i = 1; i < raw.size() - 2; i++)
+    {
+        csum = csum ^ raw[i];
+    }
+
+    if(trailer.csum != csum)
+    {
+        throw std::runtime_error("Trailer checksum does not match calculated");
+    }
 
     if(trailer.end != END_BYTE)
     {
