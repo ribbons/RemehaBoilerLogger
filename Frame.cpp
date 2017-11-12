@@ -15,6 +15,7 @@ struct Header
     uint8_t start : 8;
     uint16_t : 16;
     uint8_t length : 8;
+    uint16_t function : 16;
 } __attribute__((__packed__));
 
 struct Trailer
@@ -25,7 +26,7 @@ struct Trailer
 
 Frame::Frame(const std::vector<uint8_t> &raw)
 {
-    if(raw.size() <= sizeof(Header) + sizeof(Trailer))
+    if(raw.size() < sizeof(Header) + sizeof(Trailer))
     {
         throw std::runtime_error("Not enough data for a valid frame");
     }
@@ -42,6 +43,8 @@ Frame::Frame(const std::vector<uint8_t> &raw)
     {
         throw std::runtime_error("Header length does not match actual length");
     }
+
+    function = header.function;
 
     struct Trailer trailer;
     memcpy(&trailer, &raw[raw.size() - sizeof(trailer)], sizeof(trailer));
@@ -64,6 +67,11 @@ Frame::Frame(const std::vector<uint8_t> &raw)
     }
 
     data = std::vector<uint8_t>(raw.begin() + sizeof(header), raw.begin() + (raw.size() - sizeof(trailer)));
+}
+
+uint16_t Frame::getFunction()
+{
+    return this->function;
 }
 
 std::vector<uint8_t> Frame::getData()
