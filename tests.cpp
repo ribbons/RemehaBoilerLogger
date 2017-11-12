@@ -38,3 +38,14 @@ BOOST_AUTO_TEST_CASE(frame_function_code)
     Frame frame({ 0x02, 0x00, 0x00, 0x06, 0x34, 0x12, 0x20, 0x03 });
     BOOST_CHECK_EQUAL(frame.getFunction(), 0x1234);
 }
+
+BOOST_AUTO_TEST_CASE(frame_data)
+{
+    Frame frame({ 0x02, 0x00, 0x00, 0x07, 0x00, 0x00, 0x12, 0x15, 0x03 });
+
+    auto data = frame.getData();
+    std::vector<uint8_t> compare({ 0x12 });
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(data.begin(), data.end(),
+                                  compare.begin(), compare.end());
+}
