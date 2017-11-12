@@ -1,9 +1,9 @@
 // Copyright © 2017 Matt Robinson
 
 #include <cstring>
-#include <stdexcept>
 
 #include "Frame.h"
+#include "FramingException.h"
 
 static const uint8_t START_BYTE = 0x02;
 static const uint8_t END_BYTE   = 0x03;
@@ -28,7 +28,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 {
     if(raw.size() < sizeof(Header) + sizeof(Trailer))
     {
-        throw std::runtime_error("Not enough data for a valid frame");
+        throw FramingException("Not enough data for a valid frame");
     }
 
     struct Header header;
@@ -36,12 +36,12 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     if(header.start != START_BYTE)
     {
-        throw std::runtime_error("Incorrect start byte value");
+        throw FramingException("Incorrect start byte value");
     }
 
     if(header.length + length_adjust != raw.size())
     {
-        throw std::runtime_error("Header length does not match actual length");
+        throw FramingException("Header length does not match actual length");
     }
 
     function = header.function;
@@ -58,12 +58,12 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     if(trailer.csum != csum)
     {
-        throw std::runtime_error("Trailer checksum does not match calculated");
+        throw FramingException("Trailer checksum does not match calculated");
     }
 
     if(trailer.end != END_BYTE)
     {
-        throw std::runtime_error("Incorrect end byte value");
+        throw FramingException("Incorrect end byte value");
     }
 
     data = std::vector<uint8_t>(raw.begin() + sizeof(header), raw.begin() + (raw.size() - sizeof(trailer)));
