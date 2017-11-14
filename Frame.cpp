@@ -13,7 +13,7 @@ static const int length_adjust = 2;
 struct Header
 {
     uint8_t start : 8;
-    uint16_t : 16;
+    FrameType type : 16;
     uint8_t length : 8;
     uint16_t function : 16;
 } __attribute__((__packed__));
@@ -44,6 +44,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
         throw FramingException("Header length does not match actual length");
     }
 
+    type = header.type;
     function = header.function;
 
     struct Trailer trailer;
@@ -67,6 +68,11 @@ Frame::Frame(const std::vector<uint8_t> &raw)
     }
 
     data = std::vector<uint8_t>(raw.begin() + sizeof(header), raw.begin() + (raw.size() - sizeof(trailer)));
+}
+
+FrameType Frame::getType()
+{
+    return this->type;
 }
 
 uint16_t Frame::getFunction()
