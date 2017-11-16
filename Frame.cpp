@@ -8,7 +8,7 @@
 static const uint8_t START_BYTE = 0x02;
 static const uint8_t END_BYTE   = 0x03;
 
-static const int length_adjust = 2;
+static const int LENGTH_ADJUST = 2;
 
 struct Header
 {
@@ -39,7 +39,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
         throw FramingException("Incorrect start byte value");
     }
 
-    if(header.length + length_adjust != raw.size())
+    if(header.length + LENGTH_ADJUST != raw.size())
     {
         throw FramingException("Header length does not match actual length");
     }
@@ -68,6 +68,34 @@ Frame::Frame(const std::vector<uint8_t> &raw)
     }
 
     data = std::vector<uint8_t>(raw.begin() + sizeof(header), raw.begin() + (raw.size() - sizeof(trailer)));
+}
+
+Frame::operator std::vector<uint8_t>()
+{
+    std::vector<uint8_t> raw(sizeof(Header) + this->data.size() + sizeof(Trailer));
+
+    struct Header header;
+    header.start = START_BYTE;
+    header.type = this->type;
+    header.length = raw.size() - LENGTH_ADJUST;
+    header.function = this->function;
+
+    memcpy(&raw[0], &header, sizeof(header));
+    memcpy(&raw[sizeof(Header)], &this->data[0], this->data.size());
+
+    uint8_t csum = 0;
+
+    for(int i = 1; i < raw.size() - 2; i++)
+    {
+        csum = csum ^ raw[i];
+    }
+
+    struct Trailer trailer;
+    trailer.csum = csum;
+    trailer.end = END_BYTE;
+    memcpy(&raw[raw.size() - sizeof(trailer)], &trailer, sizeof(header));
+
+    return raw;
 }
 
 FrameType Frame::getType()

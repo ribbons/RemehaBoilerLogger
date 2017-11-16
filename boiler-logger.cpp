@@ -5,32 +5,29 @@
 #include "Serial.h"
 #include "Frame.h"
 
-static std::vector<uint8_t> req_status = { 0x02, 0x52, 0x05, 0x06, 0x02, 0x00, 0x53, 0x03 };
-
-int main(int argc, char* argv[])
+void dumpbytes(const char* label, std::vector<uint8_t> vals)
 {
-    Serial port("/dev/ttyUSB0");
+    printf("%s:\n", label);
 
-    port.WriteBytes(req_status);
-    auto reply = port.ReadBytes();
-
-    Frame frame(reply);
-
-    puts("Raw:");
-
-    for(auto i : reply)
-    {
-        printf(" %02x", i);
-    }
-
-    puts("\n\nPayload:");
-
-    for(auto i : frame.getData())
+    for(auto i : vals)
     {
         printf(" %02x", i);
     }
 
     fputc('\n', stdout);
+}
+
+int main(int argc, char* argv[])
+{
+    Serial port("/dev/ttyUSB0");
+
+    port.WriteBytes(Frame(FrameType::Request, 0x0B01));
+    auto identify_reply = port.ReadBytes();
+    dumpbytes("\nIdentify payload", Frame(identify_reply).getData());
+
+    port.WriteBytes(Frame(FrameType::Request, 0x0002));
+    auto status_reply = port.ReadBytes();
+    dumpbytes("\nStatus payload", Frame(status_reply).getData());
 
     return EXIT_SUCCESS;
 }
