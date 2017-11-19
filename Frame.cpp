@@ -15,7 +15,7 @@ struct Header
     uint8_t start : 8;
     FrameType type : 16;
     uint8_t length : 8;
-    uint16_t function : 16;
+    FrameFunction function : 16;
 } __attribute__((__packed__));
 
 struct Trailer
@@ -103,7 +103,7 @@ FrameType Frame::getType()
     return this->type;
 }
 
-uint16_t Frame::getFunction()
+FrameFunction Frame::getFunction()
 {
     return this->function;
 }
@@ -111,4 +111,9 @@ uint16_t Frame::getFunction()
 std::vector<uint8_t> Frame::getData()
 {
     return this->data;
+}
+
+void Frame::setData(std::vector<uint8_t> data)
+{
+    this->data = data;
 }

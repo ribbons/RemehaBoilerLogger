@@ -7,12 +7,12 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
-add_executable(boiler-logger Serial.cpp Frame.cpp  IdentifyMessage.cpp
-               boiler-logger.cpp)
+add_executable(boiler-logger Serial.cpp Frame.cpp Message.cpp
+               IdentifyMessage.cpp boiler-logger.cpp)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD 11)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(tests Frame.cpp IdentifyMessage.cpp tests.cpp)
+add_executable(tests Frame.cpp Message.cpp IdentifyMessage.cpp tests.cpp)
 set_property(TARGET tests PROPERTY CXX_STANDARD 11)
 set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
 TARGET_LINK_LIBRARIES(tests ${Boost_LIBRARIES})
