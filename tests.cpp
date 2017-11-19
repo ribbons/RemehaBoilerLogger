@@ -4,6 +4,7 @@
 
 #include "Frame.h"
 #include "FramingException.h"
+#include "IdentifyMessage.h"
 
 #define BOOST_TEST_MODULE Boiler test
 #include <boost/test/unit_test.hpp>
@@ -65,4 +66,19 @@ BOOST_AUTO_TEST_CASE(frame_to_raw)
 
     BOOST_CHECK_EQUAL_COLLECTIONS(raw.begin(), raw.end(),
                                   compare.begin(), compare.end());
+}
+
+BOOST_AUTO_TEST_CASE(identify_message)
+{
+    IdentifyMessage msg(std::vector<uint8_t>(
+        { 0x07, 0x00, 0x00, 0x14, 0x20, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x12, 0x34, 0x4D, 0x67, 0x89 }));
+
+    std::map<std::string, std::string> compare = {
+        {"Parameter type",    "2"},
+        {"Parameter version", "2.0"},
+        {"Serial number",     "1234M6789"},
+        {"Software version",  "1.4"}
+    };
+
+    BOOST_CHECK(msg.getValues() == compare);
 }
