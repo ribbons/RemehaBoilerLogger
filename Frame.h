@@ -14,7 +14,7 @@ enum FrameType : uint16_t
 enum FrameFunction : uint16_t
 {
     Identify = 0x0B01,
-    Status   = 0x0002,
+    Sample   = 0x0002,
 };
 
 class Frame
