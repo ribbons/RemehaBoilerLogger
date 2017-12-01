@@ -2,29 +2,24 @@
 
 #include <cstdlib>
 
-#include "Serial.h"
+#include "Boiler.h"
 #include "Frame.h"
-#include "IdentifyMessage.h"
 
 int main(int argc, char* argv[])
 {
-    Serial port("/dev/ttyUSB0");
+    Boiler boiler("/dev/ttyUSB0");
 
-    port.WriteBytes(Frame(FrameType::Request, FrameFunction::Identify));
-    auto identify_reply = port.ReadBytes();
-    Message identMsg = Message::FromFrame(Frame(identify_reply));
+    IdentifyMessage identify = boiler.ReadIdentifyData();
 
-    for (auto& value : identMsg.getValues()) {
+    for (auto& value : identify.getValues()) {
         printf("%s=%s\n", value.first.c_str(), value.second.c_str());
     }
 
     puts("\n");
 
-    port.WriteBytes(Frame(FrameType::Request, FrameFunction::Sample));
-    auto sample_reply = port.ReadBytes();
-    Message sampleMsg = Message::FromFrame(Frame(sample_reply));
+    SampleMessage sample = boiler.ReadSampleData();
 
-    for (auto& value : sampleMsg.getValues()) {
+    for (auto& value : sample.getValues()) {
         printf("%s=%s\n", value.first.c_str(), value.second.c_str());
     }
 

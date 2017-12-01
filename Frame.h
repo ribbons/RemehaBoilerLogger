@@ -33,5 +33,4 @@ public:
     FrameType getType();
     FrameFunction getFunction();
     std::vector<uint8_t> getData();
-    void setData(std::vector<uint8_t> data);
 };

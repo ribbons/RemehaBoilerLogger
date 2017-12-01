@@ -5,6 +5,7 @@
 #include "Frame.h"
 #include "FramingException.h"
 #include "IdentifyMessage.h"
+#include "SampleMessage.h"
 
 #define BOOST_TEST_MODULE Boiler test
 #include <boost/test/unit_test.hpp>
@@ -70,13 +71,11 @@ BOOST_AUTO_TEST_CASE(frame_to_raw)
 
 BOOST_AUTO_TEST_CASE(identify_message)
 {
-    Frame frame(FrameType::Request, FrameFunction::Identify);
-
-    frame.setData(std::vector<uint8_t>(
+    std::vector<uint8_t> data(
         { 0x07, 0x00, 0x00, 0x14, 0x20, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
-          0x12, 0x34, 0x4D, 0x67, 0x89 }));
+          0x12, 0x34, 0x4D, 0x67, 0x89 });
 
-    Message msg = Message::FromFrame(frame);
+    IdentifyMessage msg(data);
 
     std::map<std::string, std::string> compare = {
         {"Parameter type",    "2"},
@@ -90,17 +89,15 @@ BOOST_AUTO_TEST_CASE(identify_message)
 
 BOOST_AUTO_TEST_CASE(sample_message)
 {
-    Frame frame(FrameType::Request, FrameFunction::Sample);
-
-    frame.setData(std::vector<uint8_t>(
+    std::vector<uint8_t> data(
         { 0x88, 0x13, 0x6b, 0x12, 0x80, 0xf3, 0x80, 0xf3, 0x80, 0xf3, 0x80,
           0xf3, 0x66, 0x12, 0x00, 0x80, 0x64, 0x19, 0x7c, 0x15, 0x00, 0x80,
           0x8b, 0x05, 0xa6, 0x05, 0x1b, 0x28, 0x23, 0x00, 0x32, 0x00, 0x64,
           0x06, 0x00, 0x00, 0x04, 0xc5, 0x00, 0x01, 0x03, 0xff, 0xff, 0x00,
           0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-          0x00 }));
+          0x00 });
 
-    Message msg = Message::FromFrame(frame);
+    SampleMessage msg(data);
 
     std::map<std::string, std::string> compare = {
         {"Actual power [%]",          "6"},

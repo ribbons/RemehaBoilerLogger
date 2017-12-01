@@ -112,8 +112,3 @@ std::vector<uint8_t> Frame::getData()
 {
     return this->data;
 }
-
-void Frame::setData(std::vector<uint8_t> data)
-{
-    this->data = data;
-}

@@ -4,8 +4,6 @@
 
 class SampleMessage : public Message
 {
-    friend Message Message::FromFrame(Frame frame);
-
-protected:
+public:
     explicit SampleMessage(const std::vector<uint8_t> &raw);
 };

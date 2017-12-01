@@ -7,8 +7,6 @@
 #include <map>
 #include <vector>
 
-#include "Frame.h"
-
 class Message
 {
 protected:
@@ -27,5 +25,4 @@ protected:
 
 public:
     std::map<std::string, std::string> getValues();
-    static Message FromFrame(Frame frame);
 };

@@ -4,8 +4,6 @@
 
 class IdentifyMessage : public Message
 {
-    friend Message Message::FromFrame(Frame frame);
-
-protected:
+public:
     explicit IdentifyMessage(const std::vector<uint8_t> &raw);
 };

@@ -5,21 +5,7 @@
 
 #include <arpa/inet.h>
 
-#include "IdentifyMessage.h"
-#include "SampleMessage.h"
-
-Message Message::FromFrame(Frame frame)
-{
-    switch(frame.getFunction())
-    {
-        case FrameFunction::Identify:
-            return IdentifyMessage(frame.getData());
-        case FrameFunction::Sample:
-            return SampleMessage(frame.getData());
-    }
-
-    throw std::runtime_error("Unknown frame type");
-}
+#include "Message.h"
 
 std::string Message::SpecialDataConv5(uint64_t data)
 {
