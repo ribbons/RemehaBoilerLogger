@@ -13,6 +13,7 @@ private:
 
 public:
     explicit Boiler(const std::string& path) : port(path) {};
+    std::vector<uint8_t> ReadEepromBlock(uint8_t blockNum);
     IdentifyMessage ReadIdentifyData();
     SampleMessage ReadSampleData();
 };

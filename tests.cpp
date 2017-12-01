@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(frame_type)
 
 BOOST_AUTO_TEST_CASE(frame_function_code)
 {
-    Frame frame({ 0x02, 0x00, 0x00, 0x06, 0x34, 0x12, 0x20, 0x03 });
+    Frame frame({ 0x02, 0x00, 0x00, 0x06, 0x12, 0x34, 0x20, 0x03 });
     BOOST_CHECK_EQUAL(frame.getFunction(), 0x1234);
 }
 
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(frame_to_raw)
     Frame frame(FrameType::Request, (FrameFunction)0x1234);
 
     std::vector<uint8_t> raw = frame;
-    std::vector<uint8_t> compare({ 0x02, 0x52, 0x05, 0x06, 0x34, 0x12, 0x77, 0x03 });
+    std::vector<uint8_t> compare({ 0x02, 0x52, 0x05, 0x06, 0x12, 0x34, 0x77, 0x03 });
 
     BOOST_CHECK_EQUAL_COLLECTIONS(raw.begin(), raw.end(),
                                   compare.begin(), compare.end());

@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include <arpa/inet.h>
+
 #include "Frame.h"
 #include "FramingException.h"
 
@@ -15,7 +17,7 @@ struct Header
     uint8_t start : 8;
     FrameType type : 16;
     uint8_t length : 8;
-    FrameFunction function : 16;
+    uint16_t function : 16;
 } __attribute__((__packed__));
 
 struct Trailer
@@ -45,7 +47,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
     }
 
     type = header.type;
-    function = header.function;
+    function = (FrameFunction)ntohs(header.function);
 
     struct Trailer trailer;
     memcpy(&trailer, &raw[raw.size() - sizeof(trailer)], sizeof(trailer));
@@ -78,7 +80,7 @@ Frame::operator std::vector<uint8_t>()
     header.start = START_BYTE;
     header.type = this->type;
     header.length = raw.size() - LENGTH_ADJUST;
-    header.function = this->function;
+    header.function = htons((uint16_t)this->function);
 
     memcpy(&raw[0], &header, sizeof(header));
     memcpy(&raw[sizeof(Header)], &this->data[0], this->data.size());

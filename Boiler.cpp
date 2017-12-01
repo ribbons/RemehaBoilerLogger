@@ -8,6 +8,12 @@ std::vector<uint8_t> Boiler::FetchData(FrameFunction function)
     return Frame(port.ReadBytes()).getData();
 }
 
+std::vector<uint8_t> Boiler::ReadEepromBlock(uint8_t blockNum)
+{
+    auto reply = FetchData((FrameFunction)(FrameFunction::EepromRead + blockNum));
+    return reply;
+}
+
 IdentifyMessage Boiler::ReadIdentifyData()
 {
     auto reply = FetchData(FrameFunction::Identify);

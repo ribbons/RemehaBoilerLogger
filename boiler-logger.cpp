@@ -5,6 +5,18 @@
 #include "Boiler.h"
 #include "Frame.h"
 
+void dumpbytes(const char* label, std::vector<uint8_t> vals)
+{
+    printf("%s:\n", label);
+
+    for(auto i : vals)
+    {
+        printf(" %02x", i);
+    }
+
+    fputc('\n', stdout);
+}
+
 int main(int argc, char* argv[])
 {
     Boiler boiler("/dev/ttyUSB0");
@@ -22,6 +34,11 @@ int main(int argc, char* argv[])
     for (auto& value : sample.getValues()) {
         printf("%s=%s\n", value.first.c_str(), value.second.c_str());
     }
+
+    puts("\n");
+
+    auto block = boiler.ReadEepromBlock(1);
+    dumpbytes("EEPROM block", block);
 
     return EXIT_SUCCESS;
 }
