@@ -64,13 +64,6 @@ foreach my $confignode (@confignodes)
     my ($present) = $confignode->findnodes('./present');
     my $name = $langtext{$present->getAttribute('name.nr')};
 
-    if($name =~ m/d[FU]-code/)
-    {
-        # These aren't actually returned in the identify response, Recom
-        # appears to read block 0x10 from EEPROM and append it to the response
-        next;
-    }
-
     if($present->hasAttribute('unit.nr'))
     {
         my $unit = $langtext{$present->getAttribute('unit.nr')};

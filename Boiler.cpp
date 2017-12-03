@@ -2,6 +2,9 @@
 
 #include "Boiler.h"
 
+const uint8_t DFDU_NUM_BYTES    = 0x02;
+const uint8_t DFDU_EEPROM_BLOCK = 0x10;
+
 std::vector<uint8_t> Boiler::FetchData(FrameFunction function)
 {
     port.WriteBytes(Frame(FrameType::Request, function));
@@ -16,8 +19,14 @@ std::vector<uint8_t> Boiler::ReadEepromBlock(uint8_t blockNum)
 
 IdentifyMessage Boiler::ReadIdentifyData()
 {
-    auto reply = FetchData(FrameFunction::Identify);
-    return IdentifyMessage(reply);
+    auto identData = FetchData(FrameFunction::Identify);
+    auto dfDu = ReadEepromBlock(DFDU_EEPROM_BLOCK);
+
+    // For some reason the 'dF-code' and 'dU-code' (whatever they are) aren't
+    // included in the response to an identify request, but have to be read
+    // out of a specific EEPROM block and tacked on to the end of the data
+    identData.insert(identData.end(), dfDu.begin(), dfDu.begin() + DFDU_NUM_BYTES);
+    return IdentifyMessage(identData);
 }
 
 SampleMessage Boiler::ReadSampleData()
