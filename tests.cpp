@@ -69,7 +69,12 @@ BOOST_AUTO_TEST_CASE(frame_to_raw)
                                   compare.begin(), compare.end());
 }
 
-BOOST_AUTO_TEST_CASE(identify_message)
+BOOST_AUTO_TEST_CASE(identify_message_too_short)
+{
+    BOOST_CHECK_THROW(IdentifyMessage msg(std::vector<uint8_t>(15, 0x0)), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(identify_message_values)
 {
     std::vector<uint8_t> data(
         { 0x07, 0x00, 0x00, 0x14, 0x20, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -87,7 +92,12 @@ BOOST_AUTO_TEST_CASE(identify_message)
     BOOST_CHECK(msg.getValues() == compare);
 }
 
-BOOST_AUTO_TEST_CASE(sample_message)
+BOOST_AUTO_TEST_CASE(sample_message_too_short)
+{
+    BOOST_CHECK_THROW(SampleMessage msg(std::vector<uint8_t>(42, 0x0)), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(sample_message_values)
 {
     std::vector<uint8_t> data(
         { 0x88, 0x13, 0x6b, 0x12, 0x80, 0xf3, 0x80, 0xf3, 0x80, 0xf3, 0x80,
