@@ -2,8 +2,10 @@
 
 #include "Boiler.h"
 
-const uint8_t DFDU_NUM_BYTES    = 0x02;
-const uint8_t DFDU_EEPROM_BLOCK = 0x10;
+const uint8_t COUNTER_EEPROM_BLOCK = 0x01;
+const uint8_t COUNTER_BLOCK_COUNT  = 0x02;
+const uint8_t DFDU_EEPROM_BLOCK    = 0x10;
+const uint8_t DFDU_NUM_BYTES       = 0x02;
 
 std::vector<uint8_t> Boiler::FetchData(FrameFunction function)
 {
@@ -15,6 +17,19 @@ std::vector<uint8_t> Boiler::ReadEepromBlock(uint8_t blockNum)
 {
     auto reply = FetchData((FrameFunction)(FrameFunction::EepromRead + blockNum));
     return reply;
+}
+
+std::vector<uint8_t> Boiler::ReadEepromBlocks(uint8_t blockNum, uint8_t count)
+{
+    std::vector<uint8_t> data;
+
+    for(uint8_t i = blockNum; i < (blockNum + count); i++)
+    {
+        auto block = ReadEepromBlock(i);
+        data.insert(data.end(), block.begin(), block.end());
+    }
+
+    return data;
 }
 
 IdentifyMessage Boiler::ReadIdentifyData()
@@ -33,4 +48,10 @@ SampleMessage Boiler::ReadSampleData()
 {
     auto reply = FetchData(FrameFunction::Sample);
     return SampleMessage(reply);
+}
+
+CountersMessage Boiler::ReadCountersData()
+{
+    auto reply = ReadEepromBlocks(COUNTER_EEPROM_BLOCK, COUNTER_BLOCK_COUNT);
+    return CountersMessage(reply);
 }

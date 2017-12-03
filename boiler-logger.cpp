@@ -37,6 +37,14 @@ int main(int argc, char* argv[])
 
     puts("\n");
 
+    CountersMessage counters = boiler.ReadCountersData();
+
+    for (auto& value : counters.getValues()) {
+        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
+    }
+
+    puts("\n");
+
     auto block = boiler.ReadEepromBlock(1);
     dumpbytes("EEPROM block", block);
 

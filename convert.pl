@@ -21,10 +21,11 @@ sub uint_from_bits
 use constant BITS_IN_BYTE => 8;
 
 use constant EXPRESSIONS => {
-    'A'                     => ['uint8_t',   8,   1],
-    'A x 0.1'               => ['uint8_t',   8,  10],
-    'A.0 + B.1'             => ['uint16_t', 16,   1],
-    'sgn(A.0 + B.1) x 0.01' => ['int16_t',  16, 100],
+    'A'                     => ['uint8_t',   8, '$id',           1],
+    'A x 0.1'               => ['uint8_t',   8, '$id',         0.1],
+    'A.0 + B.1'             => ['uint16_t', 16, '$id',           1],
+    '(A.1 + B.0) x 8'       => ['uint16_t', 16, 'ntohs($id)',    8],
+    'sgn(A.0 + B.1) x 0.01' => ['int16_t',  16, '$id',        0.01],
 };
 
 use constant SPECIAL => {
@@ -44,7 +45,7 @@ my %langtext;
 
 foreach my $textnode (@textnodes)
 {
-    $langtext{$textnode->getAttribute('id')} = $textnode->getAttribute('value');
+    $langtext{$textnode->getAttribute('id')} = $textnode->getAttribute('value') =~ s/ +$//r;
 }
 
 my $configxml = XML::LibXML->load_xml(location => $configfile);
@@ -99,8 +100,10 @@ foreach my $confignode (@confignodes)
         {
             my $expr = $function->getAttribute('expression');
             die "Unknown expression \"$expr\"" unless exists EXPRESSIONS->{$expr};
-            my $scale;
-            ($type, $size, $scale) = @{EXPRESSIONS->{$expr}};
+            my ($cexpr, $scale);
+            ($type, $size, $cexpr, $scale) = @{EXPRESSIONS->{$expr}};
+
+            $args[0] = $cexpr =~ s/\$id/$args[0]/gr;
 
             $func = 'FormatNumber';
             push @args, $scale;

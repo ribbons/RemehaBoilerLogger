@@ -8,12 +8,13 @@ find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
 add_executable(boiler-logger Serial.cpp Boiler.cpp Frame.cpp Message.cpp
-               IdentifyMessage.cpp SampleMessage.cpp boiler-logger.cpp)
+               IdentifyMessage.cpp SampleMessage.cpp CountersMessage.cpp
+               boiler-logger.cpp)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD 11)
 set_property(TARGET boiler-logger PROPERTY CXX_STANDARD_REQUIRED ON)
 
 add_executable(tests Frame.cpp Message.cpp IdentifyMessage.cpp
-                     SampleMessage.cpp tests.cpp)
+                     SampleMessage.cpp CountersMessage.cpp tests.cpp)
 set_property(TARGET tests PROPERTY CXX_STANDARD 11)
 set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
 TARGET_LINK_LIBRARIES(tests ${Boost_LIBRARIES})

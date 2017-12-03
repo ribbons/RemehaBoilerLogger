@@ -31,9 +31,9 @@ std::string Message::SpecialDataConv6(uint8_t data)
     return stream.str();
 }
 
-std::string Message::FormatNumber(int value, uint scale, int min, int max, std::string minText, std::string maxText)
+std::string Message::FormatNumber(int value, float scale, int min, int max, std::string minText, std::string maxText)
 {
-    float scaled = (float)value / scale;
+    float scaled = (float)value * scale;
 
     if(scaled < min)
     {

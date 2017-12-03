@@ -4,6 +4,7 @@
 
 #include "Frame.h"
 #include "FramingException.h"
+#include "CountersMessage.h"
 #include "IdentifyMessage.h"
 #include "SampleMessage.h"
 
@@ -149,6 +150,32 @@ BOOST_AUTO_TEST_CASE(sample_message_values)
         {"State",                     "3: Running for CH"},
         {"Status report",             "Open"},
         {"Three way valve",           "Off"}
+    };
+
+    BOOST_CHECK(msg.getValues() == compare);
+}
+
+BOOST_AUTO_TEST_CASE(counters_message_values)
+{
+    std::vector<uint8_t> data(
+        { 0x14, 0x20, 0x02, 0x00, 0x00, 0x00, 0x08, 0x2b, 0x1d, 0x97, 0x05,
+          0x55, 0x00, 0x84, 0x24, 0xff, 0x30, 0xb8, 0x27, 0x67, 0x29, 0xcf,
+          0x5c, 0xfc, 0x00, 0x08, 0x00, 0x10, 0x00, 0x00, 0x00, 0x00 });
+
+    CountersMessage msg(data);
+
+    std::map<std::string, std::string> compare = {
+        {"Burner starts DHW",           "85624"},
+        {"Failed burner starts",        "64"},
+        {"Hours run 3-way valve DHW",   "60600"},
+        {"Hours run CH+DHW",            "10920"},
+        {"Hours run DHW",               "1056"},
+        {"Hours run pump CH+DHW",       "16728"},
+        {"Number of 3way valve cycles", "80696"},
+        {"Number of flame loss",        "128"},
+        {"Power supply available hrs",  "75768"},
+        {"Pump starts CH+DHW",          "99776"},
+        {"Total Burner starts CH+DHW",  "190432"},
     };
 
     BOOST_CHECK(msg.getValues() == compare);
