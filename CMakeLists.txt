@@ -21,18 +21,19 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
-add_executable(boiler-logger Serial.cpp Boiler.cpp Frame.cpp Message.cpp
-               IdentifyMessage.cpp SampleMessage.cpp CountersMessage.cpp
-               boiler-logger.cpp)
-set_property(TARGET boiler-logger PROPERTY CXX_STANDARD 11)
-set_property(TARGET boiler-logger PROPERTY CXX_STANDARD_REQUIRED ON)
+add_library(shared OBJECT Frame.cpp Message.cpp IdentifyMessage.cpp
+            SampleMessage.cpp CountersMessage.cpp)
 
-add_executable(tests Frame.cpp Message.cpp IdentifyMessage.cpp
-                     SampleMessage.cpp CountersMessage.cpp tests.cpp)
-set_property(TARGET tests PROPERTY CXX_STANDARD 11)
-set_property(TARGET tests PROPERTY CXX_STANDARD_REQUIRED ON)
+add_executable(boiler-logger Serial.cpp Boiler.cpp boiler-logger.cpp
+               $<TARGET_OBJECTS:shared>)
+
+add_executable(tests tests.cpp $<TARGET_OBJECTS:shared>)
 TARGET_LINK_LIBRARIES(tests ${Boost_LIBRARIES})
 add_custom_command(TARGET tests POST_BUILD COMMAND tests)
+
+set_target_properties(shared boiler-logger tests
+                      PROPERTIES CXX_STANDARD 11
+                                 CXX_STANDARD_REQUIRED ON)
 
 file(GLOB CPP_FILES *.cpp)
 
