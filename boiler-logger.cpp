@@ -17,52 +17,86 @@
  */
 
 #include <cstdlib>
+#include <thread>
 
 #include "Boiler.h"
-#include "Frame.h"
 
-void dumpbytes(const char* label, std::vector<uint8_t> vals)
+const std::chrono::hours IDENTIFY_INTERVAL(12);
+const std::chrono::seconds SAMPLE_INTERVAL(1);
+const std::chrono::minutes COUNTERS_INTERVAL(1);
+
+using map = std::map<std::string, std::string>;
+
+map lastIdentifyVals;
+map lastCountersVals;
+map lastSampleVals;
+
+void writeDifferentVals(const map &newVals, map &oldVals)
 {
-    printf("%s:\n", label);
+    map filteredVals;
 
-    for(auto i : vals)
+    if(oldVals.empty())
     {
-        printf(" %02x", i);
+        filteredVals = oldVals = newVals;
+    }
+    else
+    {
+        for(auto& newVal : newVals)
+        {
+            if(oldVals.at(newVal.first) != newVal.second)
+            {
+                filteredVals[newVal.first] = newVal.second;
+            }
+        }
+
+        oldVals = newVals;
     }
 
-    fputc('\n', stdout);
+    for(auto& value : filteredVals)
+    {
+        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
+    }
 }
 
 int main(int argc, char* argv[])
 {
     Boiler boiler("/dev/ttyUSB0");
 
-    IdentifyMessage identify = boiler.ReadIdentifyData();
+    std::chrono::time_point<std::chrono::steady_clock> lastIdentify;
+    std::chrono::time_point<std::chrono::steady_clock> lastCounters;
+    std::chrono::time_point<std::chrono::steady_clock> lastSample;
 
-    for (auto& value : identify.getValues()) {
-        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
+    while(true)
+    {
+        auto difference = std::chrono::steady_clock::now() - lastIdentify;
+
+        if(difference >= IDENTIFY_INTERVAL)
+        {
+            lastIdentify = std::chrono::steady_clock::now();
+            IdentifyMessage identify = boiler.ReadIdentifyData();
+            writeDifferentVals(identify.getValues(), lastIdentifyVals);
+        }
+
+        difference = std::chrono::steady_clock::now() - lastCounters;
+
+        if(difference >= COUNTERS_INTERVAL)
+        {
+            lastCounters = std::chrono::steady_clock::now();
+            CountersMessage counters = boiler.ReadCountersData();
+            writeDifferentVals(counters.getValues(), lastCountersVals);
+        }
+
+        difference = std::chrono::steady_clock::now() - lastSample;
+
+        if(difference >= SAMPLE_INTERVAL)
+        {
+            lastSample = std::chrono::steady_clock::now();
+            SampleMessage sample = boiler.ReadSampleData();
+            writeDifferentVals(sample.getValues(), lastSampleVals);
+        }
+
+        std::this_thread::sleep_for(SAMPLE_INTERVAL);
     }
-
-    puts("\n");
-
-    SampleMessage sample = boiler.ReadSampleData();
-
-    for (auto& value : sample.getValues()) {
-        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
-    }
-
-    puts("\n");
-
-    CountersMessage counters = boiler.ReadCountersData();
-
-    for (auto& value : counters.getValues()) {
-        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
-    }
-
-    puts("\n");
-
-    auto block = boiler.ReadEepromBlock(1);
-    dumpbytes("EEPROM block", block);
 
     return EXIT_SUCCESS;
 }
