@@ -58,7 +58,7 @@ void writeDifferentVals(const map &newVals, map &oldVals)
     }
 }
 
-int main(int argc, char* argv[])
+int main(int /* argc */, char* /* argv */[])
 {
     Boiler boiler("/dev/ttyUSB0");
 

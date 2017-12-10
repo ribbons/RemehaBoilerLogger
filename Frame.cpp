@@ -26,7 +26,7 @@
 static const uint8_t START_BYTE = 0x02;
 static const uint8_t END_BYTE   = 0x03;
 
-static const int LENGTH_ADJUST = 2;
+static const uint LENGTH_ADJUST = 2;
 
 struct Header
 {
@@ -70,7 +70,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     uint8_t csum = 0;
 
-    for(int i = 1; i < raw.size() - 2; i++)
+    for(uint i = 1; i < raw.size() - 2; i++)
     {
         csum = csum ^ raw[i];
     }
@@ -103,7 +103,7 @@ Frame::operator std::vector<uint8_t>()
 
     uint8_t csum = 0;
 
-    for(int i = 1; i < raw.size() - 2; i++)
+    for(uint i = 1; i < raw.size() - 2; i++)
     {
         csum = csum ^ raw[i];
     }

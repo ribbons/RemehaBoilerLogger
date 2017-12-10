@@ -21,6 +21,10 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS unit_test_framework)
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
+if(CMAKE_COMPILER_IS_GNUCXX)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
+endif()
+
 add_library(shared OBJECT Frame.cpp Message.cpp IdentifyMessage.cpp
             SampleMessage.cpp CountersMessage.cpp)
 
