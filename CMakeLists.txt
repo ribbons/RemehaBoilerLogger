@@ -28,7 +28,8 @@ endif()
 add_library(shared OBJECT Frame.cpp Message.cpp IdentifyMessage.cpp
             SampleMessage.cpp CountersMessage.cpp)
 
-add_executable(boiler-logger Serial.cpp Boiler.cpp boiler-logger.cpp
+add_executable(boiler-logger Serial.cpp Boiler.cpp LogLimit.cpp
+               LogLimitValue.cpp boiler-logger.cpp
                $<TARGET_OBJECTS:shared>)
 
 add_executable(tests tests.cpp $<TARGET_OBJECTS:shared>)

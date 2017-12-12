@@ -16,47 +16,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <cstdlib>
 #include <thread>
 
 #include "Boiler.h"
+#include "LogLimit.h"
 
 const std::chrono::hours IDENTIFY_INTERVAL(12);
-const std::chrono::seconds SAMPLE_INTERVAL(1);
+const std::chrono::milliseconds SAMPLE_INTERVAL(500);
 const std::chrono::minutes COUNTERS_INTERVAL(1);
-
-using map = std::map<std::string, std::string>;
-
-map lastIdentifyVals;
-map lastCountersVals;
-map lastSampleVals;
-
-void writeDifferentVals(const map &newVals, map &oldVals)
-{
-    map filteredVals;
-
-    if(oldVals.empty())
-    {
-        filteredVals = oldVals = newVals;
-    }
-    else
-    {
-        for(auto& newVal : newVals)
-        {
-            if(oldVals.at(newVal.first) != newVal.second)
-            {
-                filteredVals[newVal.first] = newVal.second;
-            }
-        }
-
-        oldVals = newVals;
-    }
-
-    for(auto& value : filteredVals)
-    {
-        printf("%s=%s\n", value.first.c_str(), value.second.c_str());
-    }
-}
 
 int main(int /* argc */, char* /* argv */[])
 {
@@ -66,6 +33,10 @@ int main(int /* argc */, char* /* argv */[])
     std::chrono::time_point<std::chrono::steady_clock> lastCounters;
     std::chrono::time_point<std::chrono::steady_clock> lastSample;
 
+    LogLimit trackIdentifyVals;
+    LogLimit trackCountersVals;
+    LogLimit trackSampleVals;
+
     while(true)
     {
         auto difference = std::chrono::steady_clock::now() - lastIdentify;
@@ -74,7 +45,7 @@ int main(int /* argc */, char* /* argv */[])
         {
             lastIdentify = std::chrono::steady_clock::now();
             IdentifyMessage identify = boiler.ReadIdentifyData();
-            writeDifferentVals(identify.getValues(), lastIdentifyVals);
+            trackIdentifyVals.NewValues(identify.getValues());
         }
 
         difference = std::chrono::steady_clock::now() - lastCounters;
@@ -83,7 +54,7 @@ int main(int /* argc */, char* /* argv */[])
         {
             lastCounters = std::chrono::steady_clock::now();
             CountersMessage counters = boiler.ReadCountersData();
-            writeDifferentVals(counters.getValues(), lastCountersVals);
+            trackCountersVals.NewValues(counters.getValues());
         }
 
         difference = std::chrono::steady_clock::now() - lastSample;
@@ -92,7 +63,7 @@ int main(int /* argc */, char* /* argv */[])
         {
             lastSample = std::chrono::steady_clock::now();
             SampleMessage sample = boiler.ReadSampleData();
-            writeDifferentVals(sample.getValues(), lastSampleVals);
+            trackSampleVals.NewValues(sample.getValues());
         }
 
         std::this_thread::sleep_for(SAMPLE_INTERVAL);
