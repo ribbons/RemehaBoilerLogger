@@ -52,13 +52,6 @@ Serial::Serial(const std::string& path)
         throw std::system_error(errno, std::system_category(), "fcntl(F_SETFL) failed for port");
     }
 
-    ret = fcntl(fd, F_SETFL, 0);
-
-    if(ret)
-    {
-        throw std::system_error(errno, std::system_category(), "fcntl() for port failed");
-    }
-
     struct termios options;
     ret = tcgetattr(fd, &options);
 
