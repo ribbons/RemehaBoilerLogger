@@ -76,6 +76,12 @@ Serial::Serial(const std::string& path)
     // Read in 'raw mode'
     options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
 
+    // Disable input options which could modify the data
+    options.c_iflag &= ~(BRKINT | INLCR | IGNCR | ICRNL | IXON | IXOFF);
+
+    // Disable all processing of the output data
+    options.c_oflag &= ~(OPOST);
+
     ret = tcsetattr(fd, TCSANOW, &options);
 
     if(ret)

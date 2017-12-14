@@ -59,7 +59,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     if(header.length + LENGTH_ADJUST != raw.size())
     {
-        throw FramingException("Header length does not match actual length");
+        throw FramingException("Header length (" + std::to_string(header.length) + ") does not match actual length (" + std::to_string(raw.size() - LENGTH_ADJUST) + ")");
     }
 
     type = header.type;
@@ -77,7 +77,7 @@ Frame::Frame(const std::vector<uint8_t> &raw)
 
     if(trailer.csum != csum)
     {
-        throw FramingException("Trailer checksum does not match calculated");
+        throw FramingException("Trailer checksum (" + std::to_string(trailer.csum) + ") does not match calculated (" + std::to_string(csum) + ")");
     }
 
     if(trailer.end != END_BYTE)
