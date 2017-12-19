@@ -102,7 +102,7 @@ std::string Message::StatusCodeString(uint8_t value)
         case 9:
             return "9: Shut down";
         case 10:
-            return "10: Ventingcycle";
+            return "10: Venting cycle";
         case 11:
             return "11: Forced burner low flame";
         case 12:
@@ -123,9 +123,9 @@ std::string Message::LockingCodeString(uint8_t value)
         case 0:
             return "E00: Sensor error";
         case 1:
-            return "E01: Flow &gt; Tmax.";
+            return "E01: Flow > Tmax.";
         case 2:
-            return "E02: Return &gt; Flow";
+            return "E02: Return > Flow";
         case 3:
             return "E03: Earthing fault";
         case 4:
@@ -135,19 +135,19 @@ std::string Message::LockingCodeString(uint8_t value)
         case 6:
             return "E06: Flame simulation";
         case 7:
-            return "E07: Water pressure to low";
+            return "E07: Water pressure too low";
         case 8:
             return "E08: Fan error";
         case 9:
             return "E09: Low hydraulic pressure";
         case 10:
-            return "E10: insufficient deairation";
+            return "E10: Insufficient deaeration";
         case 11:
             return "E11: Airbox temp. > max.";
         case 12:
             return "E12: Error checking HRU";
         case 13:
-            return "E13: fuse";
+            return "E13: Fuse";
         case 43:
             return "E43: Parameter bounds";
         case 44:
@@ -168,19 +168,19 @@ std::string Message::BlockingCodeString(uint8_t value)
         case 40:
             return "B40: Boiler codes unknown";
         case 80:
-            return "B80: shut down input";
+            return "B80: Shut down input";
         case 81:
-            return "B81: error checking HRU";
+            return "B81: Error checking HRU";
         case 82:
             return "B82: Solar boiler warm, DHW off";
         case 83:
             return "B83: Calorifier sensor error";
         case 90:
-            return "B90: temperaure increase";
+            return "B90: Temperaure increase";
         case 91:
-            return "B91: deltaT to big";
+            return "B91: Delta T to big";
         case 92:
-            return "B92: insufficient flow";
+            return "B92: Insufficient flow";
         default:
             return "Unknown blocking code";
     }
