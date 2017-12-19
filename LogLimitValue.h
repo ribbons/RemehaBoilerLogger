@@ -26,6 +26,7 @@ private:
     std::string lastValue;
     std::chrono::time_point<std::chrono::steady_clock> started;
     long logCount;
+    bool isNumeric;
 
     void WriteLog(const std::string &value);
 

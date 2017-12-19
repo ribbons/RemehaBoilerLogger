@@ -18,7 +18,7 @@
 
 #include "LogLimitValue.h"
 
-const std::chrono::seconds MAX_AVG_LOG_FREQ(30);
+const std::chrono::seconds MAX_NUM_LOG_FREQ(60);
 
 void LogLimitValue::WriteLog(const std::string &value)
 {
@@ -30,7 +30,9 @@ LogLimitValue::LogLimitValue(const std::string &name, const std::string &value) 
     name(name),
     lastValue(value),
     started(std::chrono::steady_clock::now()),
-    logCount(0)
+    logCount(0),
+    // Names for numeric values have units in square brackets
+    isNumeric(name.find('[') != std::string::npos)
 {
     WriteLog(value);
 };
@@ -42,7 +44,8 @@ void LogLimitValue::NewValue(std::string value)
         return;
     }
 
-    if((std::chrono::steady_clock::now() - started) / logCount < MAX_AVG_LOG_FREQ)
+    if(isNumeric &&
+       (std::chrono::steady_clock::now() - started) / logCount < MAX_NUM_LOG_FREQ)
     {
         return;
     }
