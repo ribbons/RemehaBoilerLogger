@@ -36,9 +36,9 @@ int main(int argc, char* argv[])
 
     Boiler boiler(argv[1]);
 
-    std::chrono::time_point<std::chrono::steady_clock> lastIdentify;
-    std::chrono::time_point<std::chrono::steady_clock> lastCounters;
-    std::chrono::time_point<std::chrono::steady_clock> lastSample;
+    std::chrono::time_point<std::chrono::steady_clock> lastIdentify(-IDENTIFY_INTERVAL);
+    std::chrono::time_point<std::chrono::steady_clock> lastCounters(-COUNTERS_INTERVAL);
+    std::chrono::time_point<std::chrono::steady_clock> lastSample(-SAMPLE_INTERVAL);
 
     LogLimit trackIdentifyVals;
     LogLimit trackCountersVals;
