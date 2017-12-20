@@ -2,8 +2,9 @@ Remeha Boiler Logger
 ====================
 
 This is an application I've written to log data from my Remeha Avanta Plus 28c
-boiler to syslog. I'm sharing it in the hope that it proves useful to anyone
-else (especially as the info online about the boiler is pretty sparse).
+boiler (shown as `Avanta Plus V1 (P2)` in Recom) to syslog. I'm sharing it in
+the hope that it proves useful to anyone else (especially as the info online
+about the boiler is pretty sparse).
 
 I'm compiling with GCC and running it on a Raspberry Pi, but my aim has been
 to keep the bulk of the code portable. Feel free to raise pull requests to
