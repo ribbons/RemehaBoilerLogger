@@ -21,18 +21,37 @@
 
 #include "Boiler.h"
 
-const std::string filename = "eeprom.bin";
+const uint8_t BLOCK_COUNT = 64;
 
-int main(int /* argc */, char* /* argv */[])
+int main(int argc, char* argv[])
 {
-    Boiler boiler("/dev/ttyUSB0");
+    if(argc != 3)
+    {
+        std::cerr << "Usage: boiler-eeprom <port> <outfile>" << std::endl;
+        return EXIT_FAILURE;
+    }
 
-    std::cout << "Dumping boiler EEPROM to " << filename << "... " << std::flush;
-    auto eeprom = boiler.ReadEepromBlocks(0, 64);
+    std::string port = argv[1];
+    std::string filename = argv[2];
+
+    std::cout << "Connecting to boiler at " << port << "... " << std::flush;
+    Boiler boiler(port);
+    boiler.ReadIdentifyData();
     std::cout << "done" << std::endl;
 
     std::ofstream out(filename, std::ios::out | std::ios::binary);
-    out.write((const char*)&eeprom[0], eeprom.size());
+    std::cout << "Dumping boiler EEPROM to " << filename << std::flush;
+
+    for(uint8_t i = 0; i < BLOCK_COUNT; i++)
+    {
+        auto eeprom = boiler.ReadEepromBlock(i);
+        out.write((const char*)&eeprom[0], eeprom.size());
+
+        std::cout << "." << std::flush;
+    }
+
+    std::cout << " done" << std::endl;
+
     out.close();
 
     return EXIT_SUCCESS;
