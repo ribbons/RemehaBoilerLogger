@@ -65,15 +65,11 @@ int main(int argc, char* argv[])
         }
 
         difference = std::chrono::steady_clock::now() - lastSample;
+        std::this_thread::sleep_for(SAMPLE_INTERVAL - difference);
 
-        if(difference >= SAMPLE_INTERVAL)
-        {
-            lastSample = std::chrono::steady_clock::now();
-            SampleMessage sample = boiler.ReadSampleData();
-            trackSampleVals.NewValues(sample.getValues());
-        }
-
-        std::this_thread::sleep_for(SAMPLE_INTERVAL);
+        lastSample = std::chrono::steady_clock::now();
+        SampleMessage sample = boiler.ReadSampleData();
+        trackSampleVals.NewValues(sample.getValues());
     }
 
     return EXIT_SUCCESS;
