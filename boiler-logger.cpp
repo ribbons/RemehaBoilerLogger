@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <iostream>
 #include <thread>
 
 #include "Boiler.h"
@@ -25,9 +26,15 @@ const std::chrono::hours IDENTIFY_INTERVAL(12);
 const std::chrono::milliseconds SAMPLE_INTERVAL(500);
 const std::chrono::minutes COUNTERS_INTERVAL(1);
 
-int main(int /* argc */, char* /* argv */[])
+int main(int argc, char* argv[])
 {
-    Boiler boiler("/dev/ttyUSB0");
+    if(argc != 2)
+    {
+        std::cerr << "Usage: boiler-logger <port>" << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    Boiler boiler(argv[1]);
 
     std::chrono::time_point<std::chrono::steady_clock> lastIdentify;
     std::chrono::time_point<std::chrono::steady_clock> lastCounters;
