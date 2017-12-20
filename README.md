@@ -1,7 +1,7 @@
 Remeha Boiler Logger
 ====================
 
-This is an application I'm writing to log data from my Remeha Avanta Plus 28c
+This is an application I've written to log data from my Remeha Avanta Plus 28c
 boiler to syslog. I'm sharing it in the hope that it proves useful to anyone
 else (especially as the info online about the boiler is pretty sparse).
 

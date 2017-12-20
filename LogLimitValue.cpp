@@ -16,13 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
+
 #include "LogLimitValue.h"
 
 const std::chrono::seconds MAX_NUM_LOG_FREQ(60);
 
+LogFunction LogLimitValue::LogFunc;
+
 void LogLimitValue::WriteLog(const std::string &value)
 {
-    printf("%s=%s\n", name.c_str(), value.c_str());
+    std::ostringstream output;
+    output << name << "=" << value;
+    LogFunc(output.str());
+
     logCount++;
 }
 

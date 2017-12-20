@@ -19,6 +19,8 @@
 #include <iostream>
 #include <thread>
 
+#include <syslog.h>
+
 #include "Boiler.h"
 #include "LogLimit.h"
 
@@ -26,15 +28,35 @@ const std::chrono::hours IDENTIFY_INTERVAL(12);
 const std::chrono::milliseconds SAMPLE_INTERVAL(500);
 const std::chrono::minutes COUNTERS_INTERVAL(1);
 
+void logToStdout(const std::string &message)
+{
+    std::cout << message << std::endl;
+}
+
+void logToSyslog(const std::string &message)
+{
+    syslog(LOG_NOTICE, "%s", message.c_str());
+}
+
 int main(int argc, char* argv[])
 {
-    if(argc != 2)
+    if(argc < 2 || argc > 3 || (argc == 3 && std::string(argv[1]) != "-d"))
     {
-        std::cerr << "Usage: boiler-logger <port>" << std::endl;
+        std::cerr << "Usage: boiler-logger [-d] <port>" << std::endl;
         return EXIT_FAILURE;
     }
 
-    Boiler boiler(argv[1]);
+    if(argc == 3)
+    {
+        LogLimitValue::LogFunc = logToStdout;
+    }
+    else
+    {
+        LogLimitValue::LogFunc = logToSyslog;
+        openlog(NULL, LOG_CONS | LOG_PID | LOG_NDELAY, LOG_USER);
+    }
+
+    Boiler boiler(argv[argc - 1]);
 
     std::chrono::time_point<std::chrono::steady_clock> lastIdentify(-IDENTIFY_INTERVAL);
     std::chrono::time_point<std::chrono::steady_clock> lastCounters(-COUNTERS_INTERVAL);

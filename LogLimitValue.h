@@ -17,7 +17,10 @@
  */
 
 #include <chrono>
+#include <functional>
 #include <string>
+
+typedef std::function<void(const std::string&)> LogFunction;
 
 class LogLimitValue
 {
@@ -31,6 +34,8 @@ private:
     void WriteLog(const std::string &value);
 
 public:
+    static LogFunction LogFunc;
+
     explicit LogLimitValue(const std::string &name, const std::string &value);
 
     void NewValue(std::string value);
