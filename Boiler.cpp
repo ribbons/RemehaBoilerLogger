@@ -17,6 +17,7 @@
  */
 
 #include "Boiler.h"
+#include "FramingException.h"
 
 const uint8_t COUNTER_EEPROM_BLOCK = 0x01;
 const uint8_t COUNTER_BLOCK_COUNT  = 0x02;
@@ -25,8 +26,25 @@ const uint8_t DFDU_NUM_BYTES       = 0x02;
 
 std::vector<uint8_t> Boiler::FetchData(FrameFunction function)
 {
-    port.WriteBytes(Frame(FrameType::Request, function));
-    return Frame(port.ReadBytes()).getData();
+    int retries = 0;
+
+    for(;;)
+    {
+        try
+        {
+            port.WriteBytes(Frame(FrameType::Request, function));
+            return Frame(port.ReadBytes()).getData();
+        }
+        catch(FramingException)
+        {
+            if(retries == 2)
+            {
+                throw;
+            }
+
+            retries++;
+        }
+    }
 }
 
 std::vector<uint8_t> Boiler::ReadEepromBlock(uint8_t blockNum)
