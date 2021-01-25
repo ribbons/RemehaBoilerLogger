@@ -8,3 +8,4 @@ Primary Developer
 
 ### Mattias Jonsson
 Fixed compilation and cppcheck warnings
+Include raw value in Unknown state/locking/blocking code strings
