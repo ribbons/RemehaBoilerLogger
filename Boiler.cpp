@@ -1,6 +1,6 @@
 /*
  * This file is part of Remeha Boiler Logger.
- * Copyright © 2017 by the authors - see the AUTHORS file for details.
+ * Copyright © 2017-2021 by the authors - see the AUTHORS file for details.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ std::vector<uint8_t> Boiler::FetchData(FrameFunction function)
             port.WriteBytes(Frame(FrameType::Request, function));
             return Frame(port.ReadBytes()).getData();
         }
-        catch(FramingException)
+        catch(FramingException&)
         {
             if(retries == 2)
             {
