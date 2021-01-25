@@ -1,6 +1,6 @@
 /*
  * This file is part of Remeha Boiler Logger.
- * Copyright © 2017 by the authors - see the AUTHORS file for details.
+ * Copyright © 2017-2021 by the authors - see the AUTHORS file for details.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ std::string Message::StatusCodeString(uint8_t value)
         case 15:
             return "15: Manual heat demand";
         default:
-            return "Unknown State";
+            return "Unknown State (" + std::to_string(value) + ")";
     }
 }
 
@@ -157,7 +157,7 @@ std::string Message::LockingCodeString(uint8_t value)
         case 46:
             return "E46: dF/dU table error";
         default:
-            return "Unknown locking code";
+            return "Unknown locking code (" + std::to_string(value) + ")";
     }
 }
 
@@ -182,7 +182,7 @@ std::string Message::BlockingCodeString(uint8_t value)
         case 92:
             return "B92: Insufficient flow";
         default:
-            return "Unknown blocking code";
+            return "Unknown blocking code (" + std::to_string(value) + ")";
     }
 }
 

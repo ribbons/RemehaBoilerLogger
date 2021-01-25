@@ -1,6 +1,6 @@
 /*
  * This file is part of Remeha Boiler Logger.
- * Copyright © 2017 by the authors - see the AUTHORS file for details.
+ * Copyright © 2017-2021 by the authors - see the AUTHORS file for details.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE(sample_message_values)
         {"Internal setpoint [°C]",    "90"},
         {"Ionisation",                "Yes"},
         {"Ionisation current [uA]",   "2.7"},
-        {"Lock-out",                  "Unknown locking code"},
+        {"Lock-out",                  "Unknown locking code (255)"},
         {"Mod. heat demand",          "No"},
         {"On/off heat demand",        "Yes"},
         {"Outside temp. [°C]",        "Open"},
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(sample_message_values)
         {"Room temp setpoint [°C]",   "Open"},
         {"Room temp. [°C]",           "Open"},
         {"Shut down input",           "Closed"},
-        {"Shutdown",                  "Unknown blocking code"},
+        {"Shutdown",                  "Unknown blocking code (255)"},
         {"State",                     "3: Running for CH"},
         {"Status report",             "Open"},
         {"Three way valve",           "Off"}
