@@ -36,8 +36,10 @@ use constant BITS_IN_BYTE => 8;
 use constant EXPRESSIONS => {
     'A'                     => ['uint8_t',   8, '$id',           1],
     'A x 0.1'               => ['uint8_t',   8, '$id',         0.1],
+    'A x 100'               => ['uint8_t',   8, '$id',         100],
     'A.0 + B.1'             => ['uint16_t', 16, '$id',           1],
     '(A.1 + B.0) x 8'       => ['uint16_t', 16, 'ntohs($id)',    8],
+    '(A.1 + B.0) x 10'      => ['uint16_t', 16, 'ntohs($id)',   10],
     'sgn(A.0 + B.1) x 0.01' => ['int16_t',  16, '$id',        0.01],
 };
 
