@@ -1,0 +1,22 @@
+name: CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '30 12 * * 5'
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Packages
+        run: sudo apt-get install libboost-test-dev cppcheck
+
+      - name: Build
+        run: |
+          cmake -S . -B build
+          cmake --build build
