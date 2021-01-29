@@ -1,6 +1,6 @@
 /*
  * This file is part of Remeha Boiler Logger.
- * Copyright © 2017 by the authors - see the AUTHORS file for details.
+ * Copyright © 2017-2021 by the authors - see the AUTHORS file for details.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include <cstdint>
 #include <climits>
 #include <map>
+#include <string>
 #include <vector>
 
 class Message
