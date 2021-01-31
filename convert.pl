@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 # This file is part of Remeha Boiler Logger.
-# Copyright © 2017 by the authors - see the AUTHORS file for details.
+# Copyright © 2017-2021 by the authors - see the AUTHORS file for details.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +23,6 @@ use XML::LibXML;
 
 sub uint_from_bits
 {
-    ## no critic (ProhibitMagicNumbers)
     my $bits = shift or die 'Missing bits value';
     return 'uint8_t'  if ($bits <=  8);
     return 'uint16_t' if ($bits <= 16);
@@ -173,7 +172,15 @@ foreach my $field (sort {$a->{start} <=> $b->{start}} @fields)
     if($field->{start} > $lastbit)
     {
         my $length = $field->{start} - $lastbit;
-        print '    '.uint_from_bits($length)." : $length;\n";
+        my $extra = '';
+
+        while($length > 64)
+        {
+            $extra .= "    uint64_t : 64;\n";
+            $length -= 64;
+        }
+
+        print "$extra    ".uint_from_bits($length)." : $length;\n";
     }
 
     print "    $field->{type} $field->{ident} : $field->{bits};\n";
