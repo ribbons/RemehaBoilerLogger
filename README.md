@@ -8,8 +8,27 @@ I wrote this application to log data from my boiler (shown as `Avanta Plus V1
 (P2)` in Recom). I'm sharing it in the hope that it proves useful to someone
 else (especially as the info online about the boiler is pretty sparse).
 
-Contributing
-------------
+
+Compile
+-------
+
+You'll need CMake, Boost.Test and Cppcheck installed.  For instance, on Debian,
+Ubuntu or Raspberry Pi OS you can run the following command to install them:
+
+``` sh
+sudo apt-get install cmake libboost-test-dev cppcheck
+```
+
+Once they are installed you can run the following commands to build everything:
+
+``` sh
+cmake -S . -B build
+cmake --build build
+```
+
+
+Contribute
+----------
 
 I'm compiling with GCC and running the service on a Raspberry Pi, but my aim
 has been to keep the bulk of the code portable. Feel free to raise pull
