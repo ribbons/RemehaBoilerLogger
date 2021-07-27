@@ -1,3 +1,4 @@
+---
 name: CI
 on:
   push:
@@ -6,6 +7,28 @@ on:
     - cron: '30 12 * * 5'
 
 jobs:
+  overcommit:
+    name: Overcommit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Perl::Critic
+        run: sudo apt-get install libperl-critic-perl
+
+      - name: Install overcommit and sign
+        run: |
+          sudo gem install overcommit --no-document
+          overcommit --sign
+          overcommit --sign pre-commit
+
+      - name: Run hooks
+        env:
+          GIT_AUTHOR_NAME: Dummy
+          GIT_AUTHOR_EMAIL: dummy@example.com
+        run: overcommit --run
+
   build:
     name: Build and test
     runs-on: ubuntu-latest
