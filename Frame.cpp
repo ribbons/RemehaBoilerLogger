@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2022 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -99,7 +99,7 @@ Frame::operator std::vector<uint8_t>()
     struct Trailer trailer;
     trailer.csum = csum;
     trailer.end = END_BYTE;
-    memcpy(&raw[raw.size() - sizeof(trailer)], &trailer, sizeof(header));
+    memcpy(&raw[raw.size() - sizeof(trailer)], &trailer, sizeof(trailer));
 
     return raw;
 }
