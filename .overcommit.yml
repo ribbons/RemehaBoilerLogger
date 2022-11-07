@@ -11,6 +11,22 @@ PreCommit:
     include:
       - "**/*.pl"
 
+  Cppcheck:
+    description: Lint C/C++ source files with cppcheck
+    enabled: true
+    required_executable: cppcheck
+    flags:
+      - --quiet
+      - --std=c++11
+      - --enable=all
+      - --language=c++
+      - --inline-suppr
+      - --suppress=missingIncludeSystem
+      - "--template={file}:{line}:{message}"
+    include:
+      - '**/*.cpp'
+      - '**/*.h'
+
   TrailingWhitespace:
     enabled: true
 

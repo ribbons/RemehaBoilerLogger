@@ -1,4 +1,4 @@
-# Copyright © 2017 Matt Robinson
+# Copyright © 2017-2022 Matt Robinson
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -32,10 +32,3 @@ add_custom_command(TARGET tests POST_BUILD COMMAND tests)
 set_target_properties(shared boiler-shared boiler-logger boiler-eeprom tests
                       PROPERTIES CXX_STANDARD 11
                                  CXX_STANDARD_REQUIRED ON)
-
-file(GLOB CPP_FILES *.cpp)
-
-add_custom_target(cppcheck ALL COMMAND cppcheck --quiet --error-exitcode=2
-                  --enable=all --suppress=missingIncludeSystem --std=c++11
-                  --inline-suppr ${CPP_FILES}
-                  DEPENDS boiler-logger VERBATIM)
