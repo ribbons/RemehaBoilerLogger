@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2022 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -11,7 +11,7 @@
 
 const uint8_t BLOCK_COUNT = 64;
 
-int main(int argc, char* argv[])
+int main(int argc, const char* const argv[])
 {
     if(argc != 3)
     {

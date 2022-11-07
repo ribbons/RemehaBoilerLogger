@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2022 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -26,7 +26,7 @@ void logToSyslog(const std::string &message)
     syslog(LOG_NOTICE, "%s", message.c_str());
 }
 
-int main(int argc, char* argv[])
+int main(int argc, const char* const argv[])
 {
     if(argc < 2 || argc > 3 || (argc == 3 && std::string(argv[1]) != "-d"))
     {

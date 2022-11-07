@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2022 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -10,14 +10,14 @@ void LogLimit::NewValues(const std::map<std::string, std::string> &values)
 {
     if(limitValues.empty())
     {
-        for(auto& value : values)
+        for(const auto& value : values)
         {
             limitValues.emplace(value.first, LogLimitValue(value.first, value.second));
         }
     }
     else
     {
-        for(auto& value : values)
+        for(const auto& value : values)
         {
             limitValues.at(value.first).NewValue(value.second);
         }
