@@ -12,11 +12,11 @@ else (especially as the info online about the boiler is pretty sparse).
 Compile
 -------
 
-You'll need CMake, Boost.Test and Cppcheck installed.  For instance, on Debian,
-Ubuntu or Raspberry Pi OS you can run the following command to install them:
+You'll need CMake and Boost.Test installed.  For instance, on Debian, Ubuntu
+or Raspberry Pi OS you can run the following command to install them:
 
 ``` sh
-sudo apt-get install cmake libboost-test-dev cppcheck
+sudo apt-get install cmake libboost-test-dev
 ```
 
 Once they are installed you can run the following commands to build everything:
