@@ -47,6 +47,19 @@ my $langxml = XML::LibXML->load_xml(location => $langfile);
 my @textnodes = $langxml->findnodes('/language/text');
 my %langtext;
 
+sub gettext
+{
+    my $node = shift or die 'An XML node is required';
+    my $prefix = shift or die 'An attribute prefix is required';
+
+    if($node->hasAttribute("$prefix.nr"))
+    {
+        return $langtext{$node->getAttribute("$prefix.nr")};
+    }
+
+    return $node->getAttribute("$prefix.txt");
+}
+
 foreach my $textnode (@textnodes)
 {
     $langtext{$textnode->getAttribute('id')} = $textnode->getAttribute('value') =~ s/ +$//r;
@@ -67,11 +80,11 @@ my $fieldnum = 1;
 foreach my $confignode (@confignodes)
 {
     my ($present) = $confignode->findnodes('./present');
-    my $name = $langtext{$present->getAttribute('name.nr')};
+    my $name = gettext($present, 'name');
 
     if($present->hasAttribute('unit.nr'))
     {
-        my $unit = $langtext{$present->getAttribute('unit.nr')};
+        my $unit = gettext($present, 'unit');
         $name .= " [$unit]";
     }
 
@@ -125,14 +138,14 @@ foreach my $confignode (@confignodes)
                 my $max = $limits->getAttribute('max');
                 my ($mintext, $maxtext) = ($min, $max);
 
-                if($limits->hasAttribute('min.nr'))
+                if($limits->hasAttribute('min.nr') || $limits->hasAttribute('min.txt'))
                 {
-                    $mintext = $langtext{$limits->getAttribute('min.nr')};
+                    $mintext = gettext($limits, 'min');
                 }
 
-                if($limits->hasAttribute('max.nr'))
+                if($limits->hasAttribute('max.nr') || $limits->hasAttribute('max.txt'))
                 {
-                    $maxtext = $langtext{$limits->getAttribute('max.nr')};
+                    $maxtext = gettext($limits, 'max');
                 }
 
                 push @args, $min, $max, "\"$mintext\"", "\"$maxtext\"";
