@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# Copyright © 2017-2021 Matt Robinson
+# Copyright © 2017-2024 Matt Robinson
 # Copyright © 2021 Mattias Jonsson
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
@@ -84,6 +84,12 @@ foreach my $confignode (@confignodes)
     if($function->hasAttribute('number'))
     {
         my $number = $function->getAttribute('number');
+
+        if(!defined SPECIAL->{$number})
+        {
+            die "Unimplemented special data conversion $number encountered";
+        }
+
         ($type, $size) = @{SPECIAL->{$number}};
         $func = "SpecialDataConv$number";
     }
