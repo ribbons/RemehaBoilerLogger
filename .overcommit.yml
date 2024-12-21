@@ -21,11 +21,10 @@ PreCommit:
       - --enable=all
       - --language=c++
       - --inline-suppr
+      - --suppress=checkersReport
       - --suppress=missingIncludeSystem
       - "--template={file}:{line}:{message}"
-    include:
-      - '**/*.cpp'
-      - '**/*.h'
+    include: "**/*.cpp"
 
   TrailingWhitespace:
     enabled: true

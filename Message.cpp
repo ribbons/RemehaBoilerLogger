@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2024 Matt Robinson
  * Copyright © 2021 Mattias Jonsson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -36,7 +36,8 @@ std::string Message::SpecialDataConv6(uint8_t data)
     return stream.str();
 }
 
-std::string Message::FormatNumber(int value, float scale, int min, int max, std::string minText, std::string maxText)
+std::string Message::FormatNumber(int value, float scale, int min, int max,
+    const std::string &minText, const std::string &maxText)
 {
     float scaled = (float)value * scale;
 

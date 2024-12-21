@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2022 Matt Robinson
+ * Copyright © 2017-2024 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -33,7 +33,7 @@ int main(int argc, const char* const argv[])
     for(uint8_t i = 0; i < BLOCK_COUNT; i++)
     {
         auto eeprom = boiler.ReadEepromBlock(i);
-        out.write((const char*)&eeprom[0], eeprom.size());
+        out.write(reinterpret_cast<const char*>(&eeprom[0]), eeprom.size());
 
         std::cout << "." << std::flush;
     }
