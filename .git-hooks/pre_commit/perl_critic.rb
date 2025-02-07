@@ -8,7 +8,7 @@ module Overcommit
   module Hook
     module PreCommit
       class PerlCritic < Base
-        MESSAGE_REGEX = /^(?<file>.+):(?<line>\d+):\d:/.freeze
+        MESSAGE_REGEX = /^(?<file>.+):(?<line>\d+):\d:/
 
         def run
           result = execute(command, args: applicable_files)
