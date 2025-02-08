@@ -12,7 +12,7 @@ module Overcommit
           runcmd = command
 
           if @context.class.name != 'Overcommit::HookContext::RunAll'
-            runcmd += '--suppress=unusedFunction'
+            runcmd << '--suppress=unusedFunction'
           end
 
           result = execute(runcmd, args: applicable_files)
