@@ -9,5 +9,7 @@ updates:
       timezone: Europe/London
     cooldown:
       default-days: 7
+      exclude:
+        - actions/*
     labels:
       - dependencies
