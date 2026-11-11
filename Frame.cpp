@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017-2022 Matt Robinson
+ * Copyright © 2017-2026 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -87,7 +87,11 @@ Frame::operator std::vector<uint8_t>()
     header.function = htons((uint16_t)this->function);
 
     memcpy(&raw[0], &header, sizeof(header));
-    memcpy(&raw[sizeof(Header)], &this->data[0], this->data.size());
+
+    if(this->data.size() > 0)
+    {
+        memcpy(&raw[sizeof(Header)], &(this->data)[0], this->data.size());
+    }
 
     uint8_t csum = 0;
 
