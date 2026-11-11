@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2026 Matt Robinson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -30,7 +30,17 @@ private:
     std::vector<uint8_t> data;
 
 public:
-    explicit Frame(FrameType type, FrameFunction function) : type(type), function(function) {}
+    explicit Frame(
+        FrameType type,
+        FrameFunction function,
+        const std::vector<uint8_t> &data
+    ) : type(type), function(function), data(data) {}
+
+    explicit Frame(
+        FrameType type,
+        FrameFunction function
+    ) : type(type), function(function) {}
+
     explicit Frame(const std::vector<uint8_t> &raw);
 
     operator std::vector<uint8_t>();

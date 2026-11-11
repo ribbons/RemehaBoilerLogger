@@ -1,5 +1,5 @@
 /*
- * Copyright © 2017 Matt Robinson
+ * Copyright © 2017-2026 Matt Robinson
  * Copyright © 2021 Mattias Jonsson
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
@@ -70,6 +70,18 @@ BOOST_AUTO_TEST_CASE(frame_to_raw)
 
     std::vector<uint8_t> raw = frame;
     std::vector<uint8_t> compare({ 0x02, 0x52, 0x05, 0x06, 0x12, 0x34, 0x77, 0x03 });
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(raw.begin(), raw.end(),
+                                  compare.begin(), compare.end());
+}
+
+BOOST_AUTO_TEST_CASE(frame_with_data_to_raw)
+{
+    Frame frame(FrameType::Request, (FrameFunction)0x1234, { 0x56 });
+
+    std::vector<uint8_t> raw = frame;
+    std::vector<uint8_t> compare(
+        { 0x02, 0x52, 0x05, 0x07, 0x12, 0x34, 0x56, 0x20, 0x03 });
 
     BOOST_CHECK_EQUAL_COLLECTIONS(raw.begin(), raw.end(),
                                   compare.begin(), compare.end());
