@@ -1,8 +1,8 @@
-# Copyright © 2017-2022 Matt Robinson
+# Copyright © 2017-2026 Matt Robinson
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.22...4.4)
 project("boiler")
 
 set(Boost_USE_STATIC_LIBS ON)
